@@ -16,6 +16,7 @@ import 'package:vicky/widgets/lan.dart';
 import 'package:vicky/widgets/search.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:flutter/services.dart';
+import 'package:syncfusion_flutter_sliders/sliders.dart';
 
 void main() => runApp(SpeechSampleApp());
 
@@ -36,6 +37,8 @@ class _SpeechSampleAppState extends State<SpeechSampleApp>
   String lastStatus = '';
   String _currentLocaleId = '';
   List<LocaleName> _localeNames = [];
+  double _value = 0.5;
+  double _value2 = 0.5;
   TextToSpeech tts = TextToSpeech();
   final SpeechToText speech = SpeechToText();
   late final AnimationController _controller;
@@ -150,6 +153,54 @@ class _SpeechSampleAppState extends State<SpeechSampleApp>
                                     });
                                   },
                                 ),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('Rate',
+                                    style: GoogleFonts.lato(fontSize: 15)),
+                                Container(
+                                  child: SfSlider(
+                                    min: 0.0,
+                                    max: 1.0,
+                                    interval: 0.25,
+                                    showTicks: true,
+                                    activeColor: Colors.lightBlue.shade600,
+                                    inactiveColor: Colors.purple,
+                                    value: _value,
+                                    onChanged: (dynamic newValue) {
+                                      setState(() {
+                                        _value = newValue;
+                                        tts.setRate(newValue);
+                                      });
+                                    },
+                                  ),
+                                )
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('Pitch',
+                                    style: GoogleFonts.lato(fontSize: 15)),
+                                Container(
+                                  child: SfSlider(
+                                    min: 0.0,
+                                    max: 1.0,
+                                    interval: 0.25,
+                                    showTicks: true,
+                                    activeColor: Colors.lightBlue.shade600,
+                                    inactiveColor: Colors.purple,
+                                    value: _value2,
+                                    onChanged: (dynamic newValue) {
+                                      setState(() {
+                                        _value2 = newValue;
+                                        tts.setPitch(newValue);
+                                      });
+                                    },
+                                  ),
+                                )
                               ],
                             ),
                             SizedBox(height: 10),

@@ -21,7 +21,7 @@ open(TextToSpeech ts, String lastWords, String url) {
 sendMessage(msg, TextToSpeech ts) {
   WebSocketChannel? channel;
   try {
-    channel = WebSocketChannel.connect(Uri.parse('ws://127.0.0.1:3000/'));
+    channel = WebSocketChannel.connect(Uri.parse('ws://192.168.1.134:3000/'));
   } catch (e) {
     print("Error on connecting to websocket: " + e.toString());
   }
