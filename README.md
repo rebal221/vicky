@@ -1,16 +1,45 @@
-# vicky
 
-virtual assistant
+# Vicky
 
-## Getting Started
+It is a virtual assistant, built with Flutter & Dart that can help with some tasks and is able to help with software solutions
+## Installation
 
-This project is a starting point for a Flutter application.
+Add these permissions to this file : android > app > src > main > AndroidManifest.xml
+```xml
+  <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT"/>
+    <queries>
+        <intent>
+            <action android:name="android.speech.RecognitionService" />
+        </intent>
+    </queries>
+    <queries>  
+        <intent>  
+            <action android:name="android.intent.action.TTS_SERVICE" />  
+        </intent>  
+    </queries>  
+```
+After that, modify this minSdkVersion from : android > app > build.gradle > to 21
+```gradle
+  minSdkVersion 21 
 
-A few resources to get you started if this is your first Flutter project:
+```
+When completing the previous operations, type this command in the terminal 
+```shel
+  flutter packages get
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+```
+When completing Run the project
+## Screenshots
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+![App Screenshot](https://github.com/rebal221/vicky/blob/67b442778cf4d63d0e63b216aad98cd2d2d29043/asstes/images/screen1.jpg?raw=true)
+![App Screenshot](https://github.com/rebal221/vicky/blob/67b442778cf4d63d0e63b216aad98cd2d2d29043/asstes/images/screen2.jpg?raw=true)
+
+
+## Author
+
+- [Rebal Aljrmani](https://github.com/rebal221)
+
