@@ -6,7 +6,7 @@ It is a virtual assistant, built with Flutter & Dart that can help with some tas
 
 Add these permissions to this file : android > app > src > main > AndroidManifest.xml
 ```xml
-  <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.BLUETOOTH"/>
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
