@@ -30,7 +30,6 @@ After that, modify this minSdkVersion from : android > app > build.gradle > to 2
 When completing the previous operations, type this command in the terminal 
 ```shel
   flutter packages get
-
 ```
 When completing Run the project
 ## Screenshots
