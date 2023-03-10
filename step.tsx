@@ -18,7 +18,7 @@ function UserHeader() {
   const [showNotifications, setShowNotifications] = useState(false);
   const [isshowPriceingServices, setshowPriceingServices] = useState(false);
   const [PriceingServicesoutbox, setPriceingServicesoutbox] = useState([]);
-  const [PriceingServicesinbox, setPriceingServicesinbox] = useState([]);
+  const [PriceingServicesinbox, setPriceingServicesinbox] = useState<any>([]);
   const [req, setreq] = useState([]);
   const [user_id, setuser_id] = useState<any>();
   const [activeLanguage, setLang] = useState<any>()
@@ -42,7 +42,7 @@ function UserHeader() {
       checkservicesoutbox()
       checkservicesinbox()
       setiservices(sessionStorage.getItem('priceing') === 'true' ? true : false)
-    }, 7000);
+    }, 11000);
 
     return () => clearInterval(intervalId);
   }, [email, activeLanguage, req]);
@@ -125,11 +125,11 @@ function UserHeader() {
       const response = await fetch(API_BASE_URL + 'checkservicesinbox', requestOptions);
       const data = await response.json();
       console.log(data);
-    
-      
 
-      setreq(data['req'])
-      setPriceingServicesinbox(data['msg'])
+
+
+      setreq(data)
+      setPriceingServicesinbox(data)
     } catch (error) {
       console.error(error);
     }
@@ -165,10 +165,7 @@ function UserHeader() {
       body: JSON.stringify({ 'user_id': user_id, 'req_id': req_id })
     };
     try {
-      const response = await fetch(API_BASE_URL + 'saveReplay', requestOptions);
-      const data = await response.json();
-      // setNotificationsoffer(data);
-      console.log(data)
+      const response = await fetch(API_BASE_URL + 'saveReplay', requestOptions); 
     } catch (error) {
       console.error(error);
     }
@@ -196,10 +193,17 @@ function UserHeader() {
     setShowNotifications(!showNotifications);
   }
   function handleServices() {
-    console.log(PriceingServicesinbox);
-    
+    console.log(PriceingServicesoutbox);
+
     setshowPriceingServices(!isshowPriceingServices)
   }
+  const inboxByReqId = PriceingServicesinbox.reduce((acc: any, message:any) => {
+    if (!acc[message['req_id']]) {
+      acc[message['req_id']] = [];
+    }
+    acc[message['req_id']].push(message);
+    return acc;
+  }, {});
 
   return (
     <StyledHeader className="pt-6">
@@ -255,9 +259,9 @@ function UserHeader() {
                 height={30}
               ></Image>
             </div>
-            {(isshowPriceingServices && PriceingServicesoutbox) && (
+            {(isshowPriceingServices && (PriceingServicesoutbox || PriceingServicesinbox)) && (
               <div className='notification-dropdown'>
-                <ul style={{ height: '15rem', width: '15rem' }}>
+                <ul style={{ maxHeight: '15rem', width: '15rem', overflowX: 'auto' }}>
                   {PriceingServicesoutbox && <> {PriceingServicesoutbox.length > 0 && <>
                     {PriceingServicesoutbox.filter(service => service['user_id'] != user_id).map((service, index) => (
                       <li style={{ height: '3rem', padding: '2%', cursor: 'pointer' }} key={index}
@@ -281,32 +285,37 @@ function UserHeader() {
                   </>}</>}
 
 
-                  {(PriceingServicesinbox&&isshowPriceingServices) &&
-                    <>
-                      {PriceingServicesinbox.filter(service => service['user_id'] != user_id.toString()).map((service, index) => {
-                        return (
-                          <div key={index}>
-                            <li style={{ height: '3rem', padding: '2%', cursor: 'pointer' }} key={index}
-                              onClick={() => {
-                                window.location.href = `./pricing-replay?id=${service['id']}`;
-                              }}>
-                              <div className='outboxNotf'>
-                                <Image
-                                  src={'/images/yellowIcon.png'}
-                                  width={30}
-                                  height={30}
-                                ></Image>
-                                <div>
-                                  <div></div>
-                                  <div style={{ fontSize: '12px' }}>{req[0]['massege']} ({activeLanguage === 'ar' ? service['serviceName_ar'] : service['serviceName']})</div>
-                                </div>
+                  {Object.keys(inboxByReqId).map((reqId) => {
+                    console.log('wwwwwwwww');
+                    console.log(inboxByReqId);
+                    console.log(req);
+                    
+                    const messages = inboxByReqId[reqId];
+                    const count = Array.isArray(messages) ? messages.filter((msg: any) => msg.receiver_id === user_id.toString()).length : 0;
+                    if (count > 0) {
+                      return (
+                        <li
+                          style={{ height: '3rem', padding: '2%', cursor: 'pointer' }}
+                          key={reqId}
+                          onClick={() => {
+                            // window.location.href = `./pricing-replay?id=${reqId}`;
+                            console.log(reqId);
+                            
+                          }}
+                        >
+                          <div className='outboxNotf'>
+                            <Image src={'/images/yellowIcon.png'} width={30} height={30}></Image>
+                            <div>
+                              <div></div>
+                              <div style={{ fontSize: '12px' }}>
+                                {count} {activeLanguage === 'ar' ? inboxByReqId[reqId][0]['sender_id'] : 'Pricing Requests'}
                               </div>
-                            </li>
+                            </div>
                           </div>
-                        );
-                      })}
-                    </>
-                  }
+                        </li>
+                      );
+                    }
+                  })}
                 </ul>
               </div>
             )}
